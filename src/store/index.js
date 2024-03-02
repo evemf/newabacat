@@ -1,35 +1,39 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
+
+// Retrieve isLoggedIn state from sessionStorage if available
+const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
 
 export default createStore({
   state: {
-    isLoggedIn: false,
+    isLoggedIn: isLoggedIn,
     user: null
   },
   mutations: {
     login(state, user) {
       state.isLoggedIn = true;
       state.user = user;
+      // Store isLoggedIn state in sessionStorage
+      sessionStorage.setItem('isLoggedIn', 'true');
     },
     logout(state) {
       state.isLoggedIn = false;
       state.user = null;
+      // Remove isLoggedIn state from sessionStorage
+      sessionStorage.removeItem('isLoggedIn');
     }
   },
   actions: {
     async login({ commit }, credentials) {
-      try {
-        // Make API request to authenticate user
-        // If successful, commit mutation to set user as logged in
-        const response = await axios.post('API_ENDPOINT/login', credentials);
-        commit('login', response.data.user);
-      } catch (error) {
-        console.error('Error logging in:', error);
-        throw error;
+      // Simulate authentication with fake credentials
+      if (credentials.email === 'evemolina7@gmail.com' && credentials.password === '1234') {
+        // If credentials are valid, commit the login mutation
+        commit('login', { email: credentials.email }); // Use a fake user object for now
+      } else {
+        // If credentials are invalid, throw an error
+        throw new Error('Invalid email or password');
       }
     },
     logout({ commit }) {
-      // Simply commit mutation to logout user
       commit('logout');
     }
   }

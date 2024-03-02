@@ -1,32 +1,45 @@
 <template>
-    <div class="login">
-      <h1 class="login__title">Login</h1>
-      <form class="login__form" @submit.prevent="loginUser">
-        <input type="email" v-model="credentials.email" class="login__form-input" placeholder="Email" required>
-        <input type="password" v-model="credentials.password" class="login__form-input" placeholder="Password" required>
-        <button type="submit" class="login__form-button">Login</button>
-      </form>
-      <p>Don't have an account? <router-link to="/register" class="login__link">Register here</router-link></p>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        credentials: {
-          email: '',
-          password: ''
-        }
-      };
-    },
-    methods: {
-      loginUser() {
-        // Implement login functionality
+  <div class="login">
+    <h1 class="login__title">Login</h1>
+    <form class="login__form" @submit.prevent="loginUser">
+      <input type="email" v-model="credentials.email" class="login__form-input" placeholder="Email" required>
+      <input type="password" v-model="credentials.password" class="login__form-input" placeholder="Password" required>
+      <button type="submit" class="login__form-button">Login</button>
+    </form>
+    <p>Don't have an account? <router-link to="/register" class="login__link">Register here</router-link></p>
+  </div>
+</template>
+
+<script>
+import { mapActions } from 'vuex';
+
+export default {
+  data() {
+    return {
+      credentials: {
+        email: '',
+        password: ''
       }
+    };
+  },
+  methods: {
+    ...mapActions(['login']), // Map the login action from the Vuex store
+    loginUser() {
+      // Dispatch the login action with the entered credentials
+      this.login(this.credentials)
+        .then(() => {
+          // Login successful, user is redirected to the dashboard page automatically
+          this.$router.push({ name: 'DashboardPage' });
+        })
+        .catch(error => {
+          // Display error message for invalid credentials
+          console.error('Error logging in:', error);
+        });
     }
-  };
-  </script>
+  }
+};
+</script>
+
   
   <style lang="scss" scoped>
   .login {

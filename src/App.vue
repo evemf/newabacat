@@ -30,7 +30,6 @@ html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
 
   &__content {
     max-width: 400px;
